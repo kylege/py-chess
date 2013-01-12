@@ -70,10 +70,17 @@ function gameClickHandler(e){
     // 如果之前有选中的，且和现在不同位置，则视为走棋
     if(ChessPiece.ChoosenPieceKey 
     	&& ( ChessPiece.ChoosenPieceKey.row != row || ChessPiece.ChoosenPieceKey.col != col )){
-    	piece = ChessPiece.ChoosenPieceKey;
-    	piece.moveTo(row, col);
-    	piece.zoomOut();
-    	ChessPiece.ChoosenPieceKey = null;
+    	var piece = ChessPiece.ChoosenPieceKey;
+        var canmove = new ChessMove(piece.row, piece.col, row, col);
+        if(canmove.canMove()){
+        	piece.moveTo(row, col);
+        	piece.zoomOut();
+        	ChessPiece.ChoosenPieceKey = null;
+        }else{
+            piece._clearZoomCross();
+            ChessPiece.ChoosenPieceKey = null;
+        }
+
     }else
     // 如果之前有选中的，且和现在相同位置，则视为取消选择
     if(ChessPiece.ChoosenPieceKey && ChessPiece.ChoosenPieceKey.row == row 

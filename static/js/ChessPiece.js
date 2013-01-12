@@ -15,7 +15,7 @@ var ChessPiece =function (row, col, name, color){
 	this.col = col;
 	this.name = name;
 	this.color = color;
-	this.key = 'piece-'+this.name+'-'+this.color+'-'+this.row+this.col;
+	this.key = 'piece-'+this.name+'-'+this.color+'-'+this.row.toString()+this.col;
 	/**
 	 * 获取棋子的背景图片地址
 	 * @return {string} 
@@ -47,24 +47,28 @@ var ChessPiece =function (row, col, name, color){
 		var color = this.color;
 		var name = this.name;
 
+		var newkey = 'piece-'+this.name+'-'+this.color+'-'+row.toString()+col;
 		d3.select('#'+this.key)
 		.transition()
 		.attr('x',cord[0]-piece_width/2)
 		.attr('y',cord[1]-piece_width/2)
 		.attr('width',piece_width)
 		.attr('height',piece_width)
-		.attr('id', 'piece-'+this.name+'-'+this.color+'-'+row+col);
-
-		this.row = row;
-		this.col = col;
-		this.key = 'piece-'+this.name+'-'+this.color+'-'+row+col;
+		.each("end",function() { 
+			d3.select(this).attr('id', newkey);  // 这里id已经变了
+		});
 
 		if (ChessPiece.PiecesMap[row+'-'+col]){
 			var org_piece = ChessPiece.PiecesMap[row+'-'+col];
 			org_piece.remove();
 		}
 		ChessPiece.PiecesMap[row+'-'+col] = this;
+		delete ChessPiece.PiecesMap[this.row+'-'+this.col];
+
 		this._drawZoomCross(row, col);
+		this.row = row;
+		this.col = col;
+		this.key = newkey;
 	}
 	/**
 	 * 移除此棋子
