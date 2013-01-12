@@ -1,0 +1,96 @@
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+.footer {
+	text-align: right;
+	padding: 40px 200px 0 160px;
+}
+.row-fluid {
+	width: 800px;
+	margin: 0 auto;
+}
+.container-fluid {
+	padding: 0px 200px 0 160px;
+	min-height: 400px;
+}
+#game-div {
+	background-color: #DCEAF4;
+	min-height: 450px;
+	border-radius: 10px;
+}
+#gamestatus-div {
+	min-height: 450px;
+	border-radius: 5px;
+	font-size: 12px;
+}
+#gamebar-div{
+	width: 100px;
+	min-height: 450px;
+	float: left;
+}
+#piece_sign_top{
+	margin-top: 50px;
+	padding-left: 60px;
+}
+#piece_sign_bottom {
+	margin-top: 300px;
+	padding-left: 60px;
+}
+.gamemove-status {
+	background-repeat: no-repeat;
+	background-position: 15px,10px;
+}
+.rooms-title{
+    margin-left: 50px;
+}
+#rooms-table{
+	margin-left: 50px;
+	width: 70%;
+}
+#alert-model-dom {
+	top: 30%;
+}
+#enter-room-form{
+	margin-left: 70px;
+}
+#err-msg-div {
+	padding-left: 10%;
+}
+#going-rooms-div{
+	color: #333;
+}
+#chat-div ul{
+	background-color: #BBD8E9;
+	border-radius: 5px;
+	margin: 0 0 10px 0;
+	padding: 0 0 0 30px;
+	height: 150px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+#chat-div input {
+	width: auto;
+}
+.hischat-li {
+	color: #D14;
+}
+.shape-render{
+    shape-rendering:crispEdges
+}
+
+#chess-grid{
+	margin: 2px 20px 2px 10px;
+	padding: 2px;
+	width: 450px;
+	border-radius: 8px;
+	float: right;
+}
+#chess-grid svg {
+	cursor: pointer;
+}
+.piece-text {
+	text-anchor: middle;
+	font-size: 24px;
+	font-family: '微软雅黑','黑体',arial;
+}

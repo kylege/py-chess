@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block css-block %}
+  <style type="text/css">
+
+  </style>
+{% end %}
+
+{% block container-fluid %}
+
+    <div class="container-fluid">
+    	<div class="row-fluid">
+    		<div class="span9" id="game-div">
+    			<div id="gamebar-div">
+    				<div id="piece_sign_top" class=""></div>
+    				<div id="piece_sign_bottom" class=""></div>
+    			</div>
+    			<div id="chess-grid"></div>
+    		</div>
+    		<div class="span3" id="gamestatus-div">
+                <div id="status-div">
+                    <h5>说明</h5>
+                    <blockquote>
+                        <span>将当前地址发给朋友，邀请他一起玩吧</span>
+                    </blockquote>
+                    <blockquote>
+                        <span>链接参数规则为：<br />/room-房间名</span>
+                    </blockquote>
+
+                    <h5>当前状态</h5>
+                    <blockquote>
+                        <span id="status-span" >等待对方上线</span>
+                    </blockquote>
+                    <h5>聊天</h5>
+                    <div id="chat-div">
+                        <ul>
+
+                        </ul>
+
+                        <input title="" type="text" class="" id="chat-input" placeholder="对他说点什么吧" onkeydown="javascript: if(event.keyCode==13) sendchat(); ">
+                    </div>
+                </div>
+    		</div>
+    	</div>
+
+    </div>
+    </div>
+
+    <div id="alert-model-dom" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="alert-title">游戏已结束</h3>
+        </div>
+        <div class="modal-body">
+            <p id="alert-body"></p>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:$('#alert-model-dom').modal('hide')" class="btn">关闭</a>
+        </div>
+    </div>
+
+{% end %}
+      
+{% block javascript-block %}
+	<script type="text/javascript">
+		var static_path = '{{ config.ConfigStaticPath }}';
+		var my_piece_color = 2;
+		var his_piece_color = 1;
+	</script>
+    <script type="text/javascript" src="static/js/jquery-1.8.3.min.js"></script>	
+    <script type="text/javascript" src="static/js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="static/js/ChessPiece.js"></script>
+    <script type="text/javascript" src="static/js/ChessGrid.js"></script>
+    <script type="text/javascript" src="static/js/Game.js"></script>
+{% end %}
