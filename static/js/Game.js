@@ -127,7 +127,7 @@ function sendchat(){
     var content = $('#chat-input').val();
     $('#chat-input').val('');            
     if (!content || room_status != 1) return;
-    $('#chat-div ul').append('<li class="hischat-li"></li>');
+    $('#chat-div ul').append('<li class="mychat-li"></li>');
     $('#chat-div ul li:last-child').text(content);
     $('#chat-div ul').scrollTop($('#chat-div ul')[0].scrollHeight);
     gamesocket.send(JSON.stringify({
