@@ -112,14 +112,15 @@ class GameSocketHandler(tornado.websocket.WebSocketHandler):
                     socket.write_message({'type':'offline'})
 
                     GameSocketHandler.all_rooms[self.room_name].chess_game = ChessGame()
-                    GameSocketHandler.all_rooms[self.room_name].status = GameRoom.STATUS_WAITING        
+                    GameSocketHandler.all_rooms[self.room_name].status = GameRoom.STATUS_WAITING
                 except:
                     logging.error( '_onclose_callback Exception.' )
                     pass
         except:
             logging.error( 'on_close Exception.' )
 
-        del GameSocketHandler.socket_handlers[self.mykey]
+        if self.mykey in GameSocketHandler.socket_handlers: 
+            del GameSocketHandler.socket_handlers[self.mykey]
         self.chek_active.stop()
         return True
 

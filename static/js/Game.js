@@ -49,8 +49,8 @@ function getCurPosition(e) {
       x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
       y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
     }  
-    x -= chess_gsv[0][0].offsetLeft;
-    y -= chess_gsv[0][0].offsetTop;
+    x -= $(chess_gsv[0][0]).offset().left;  //兼容firefox
+    y -= $(chess_gsv[0][0]).offset().top;
     return [x, y];
 } 
 /**
@@ -226,6 +226,8 @@ function on_gamestart(msg){
     $('#status-span').text('对方上线，游戏开始');
 
     if(!chess_is_init){
+        d3.selectAll('#chess-grid svg *').remove();
+        ChessPiece.PiecesMap = {};
         initDraw();  //重画棋盘
         d3.select('.zoomnode').remove();
     }

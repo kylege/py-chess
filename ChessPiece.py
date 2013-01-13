@@ -3,10 +3,6 @@
 from ChessMove import ChessMove
 
 class BasicReturn():
-    result = True
-    code   = 0
-    msg    = ''
-    data   = None
 
     def __init__(self, result=True, code=0, msg='', data=None):
         self.result = result
@@ -30,15 +26,15 @@ class ChessPiece():
 
 class ChessGame():
 
-    '''
-        物理坐标与ChessPiece对象对应关系，key为 行-列, value 为ChessPiece对象
-    '''
-    PiecesMap = {}
 
     """下棋相关，保存数据等"""
     def __init__(self):
         self.last_move_color = None
         self.isGameOver = False
+        '''
+            物理坐标与ChessPiece对象对应关系，key为 行-列, value 为ChessPiece对象
+        '''
+        self.PiecesMap = {}
         my_piece_pos = [
             [6,0,'bing'],
             [6,2, 'bing'],

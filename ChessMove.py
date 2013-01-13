@@ -75,8 +75,7 @@ class ChessMove():
 		return True
 	'''将'''
 	def _canMove_king(self):
-		if self.col2 <3 or self.col2 > 5: return False
-		if self.row2 < 7 or self.row2 > 2: return False
+		if self.row2 < 7 and self.row2 > 2: return False
 		abs1 = abs(self.row1-self.row2)
 		abs2 = abs(self.col1-self.col2)
 		if abs1 == 1 and abs2 == 0: return True
