@@ -77,11 +77,16 @@ function gameClickHandler(e){
             piece.moveTo(row, col);
             piece.zoomOut();
         	ChessPiece.ChoosenPieceKey = null;
-            // send to server
+            // 发送数据
             gamemove(org_row, org_col, row, col);
-        }else{
-            piece._clearZoomCross();
-            ChessPiece.ChoosenPieceKey = null;
+        }else{  // 违反规则，不能走
+            // 如果选中了自己的棋子，当成是重新选择棋子
+            if (ChessPiece.PiecesMap[row+'-'+col] && ChessPiece.PiecesMap[row+'-'+col].color == my_piece_color) {
+                piece._clearZoomCross();
+                var curp = ChessPiece.PiecesMap[row+'-'+col];
+                curp.zoomIn();
+                ChessPiece.ChoosenPieceKey = curp;
+            }
         }
 
     }else
@@ -351,7 +356,7 @@ $(function() {
             //gamesocket.send(JSON.stringify({name:"yes"}));
         }  
         gamesocket.onmessage = function(event) {
-            console.log(event.data);
+            // console.log(event.data);
             var msg = JSON.parse(event.data)
             switch(msg.type){
                 case 'online':
