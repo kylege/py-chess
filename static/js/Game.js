@@ -10,8 +10,6 @@ var col_count = 8;
 // 棋子大小
 var piece_width = 42;
 
-var is_waiting = false;
-
 var chess_is_init = true;  //棋盘是不是没有走动过，如果没走动，他人上线就不用重画
 
 /**
@@ -72,11 +70,15 @@ function gameClickHandler(e){
     if(ChessPiece.ChoosenPieceKey 
     	&& ( ChessPiece.ChoosenPieceKey.row != row || ChessPiece.ChoosenPieceKey.col != col )){
     	var piece = ChessPiece.ChoosenPieceKey;
+        org_row = piece.row;
+        org_col = piece.col;
         var canmove = new ChessMove(piece.row, piece.col, row, col);
         if(canmove.canMove()){
-        	piece.moveTo(row, col);
-        	piece.zoomOut();
+            piece.moveTo(row, col);
+            piece.zoomOut();
         	ChessPiece.ChoosenPieceKey = null;
+            // send to server
+            gamemove(org_row, org_col, row, col);
         }else{
             piece._clearZoomCross();
             ChessPiece.ChoosenPieceKey = null;
@@ -107,7 +109,7 @@ function initStartSign(){
     $('#piece_sign_top').removeClass('gamemove-status');
     $('#piece_sign_bottom').removeClass('gamemove-status');
     var piece_signs = $('#piece_sign_top');
-    if(my_piece == 1){
+    if(my_piece_color == 1){
         piece_signs = $('#piece_sign_bottom');   
     }
     piece_signs.addClass('gamemove-status');
@@ -120,7 +122,8 @@ function sendchat(){
     var content = $('#chat-input').val();
     $('#chat-input').val('');            
     if (!content || room_status != 1) return;
-    $('#chat-div ul').append('<li class="mychat-li">'+content+'</li>');
+    $('#chat-div ul').append('<li class="hischat-li"></li>');
+    $('#chat-div ul li:last-child').text(content);
     $('#chat-div ul').scrollTop($('#chat-div ul')[0].scrollHeight);
     gamesocket.send(JSON.stringify({
         room: room_name,
@@ -137,17 +140,24 @@ function sendchat(){
  */
 function gamemove(x1,y1,x2,y2){
     // 如果我是黑方，还得把我自己看到的坐标，转换成红方的立场下相应坐标，再发给服务器
+    if(my_piece_color == 2){
+        x1 = row_count - x1;
+        y1 = col_count - y1;
+        x2 = row_count - x2;
+        y2 = col_count - y2;
+    }
     chess_is_init = false;
-    gamesocket.send(JSON.stringify({
+    var data = JSON.stringify({
         room: room_name,
-        x1: x1,
-        y1: y2,
-        x2: x2,
-        y2: y2,
+        row1: x1,
+        col1: y1,
+        row2: x2,
+        col2: y2,
         'type':'on_gamemove',
-    }));
+    });
+    gamesocket.send(data);
     is_waiting = true;
-    $('#game-canvas').css('cursor', 'default');
+    d3.select('#chess-grid svg').style('cursor','default')
     $('#piece_sign_bottom').removeClass('gamemove-status');
     $('#piece_sign_top').addClass('gamemove-status');
 }
@@ -182,17 +192,25 @@ function on_offline(msg){
  */
 function on_gamemove(msg){
     chess_is_init = false;
-    x1 = parseInt(msg.x1);
-    y1 = parseInt(msg.y1);
-    x2 = parseInt(msg.x2);
-    y2 = parseInt(msg.y2);
+    x1 = parseInt(msg.row1);
+    y1 = parseInt(msg.col1);
+    x2 = parseInt(msg.row2);
+    y2 = parseInt(msg.col2);
 
-    var movep = ChessPiece.PiecesMap[x1+'-'+yx];
+    // 如果我是黑方，还得把我自己看到的坐标，转换成红方的立场下相应坐标
+    if(my_piece_color == 2){
+        x1 = row_count - x1;
+        y1 = col_count - y1;
+        x2 = row_count - x2;
+        y2 = col_count - y2;
+    }
+
+    var movep = ChessPiece.PiecesMap[x1+'-'+y1];
     movep._clearZoomCross();  // 清掉我这边的标志
     movep.zoomIn();
     movep.moveTo(x2, y2);
 
-    $('#game-canvas').css('cursor', 'pointer');
+    d3.select('#chess-grid svg').style('cursor','pointer');
     $('#piece_sign_top').removeClass('gamemove-status');
     $('#piece_sign_bottom').addClass('gamemove-status');
     is_waiting = false;
@@ -203,19 +221,17 @@ function on_gamemove(msg){
  * @return {bool}     
  */
 function on_gamestart(msg){
-    is_waiting = false;
+    is_waiting = (my_piece_color==2) ? true : false;
     room_status = 1;
     $('#status-span').text('对方上线，游戏开始');
 
     if(!chess_is_init){
         initDraw();  //重画棋盘
+        d3.select('.zoomnode').remove();
     }
 
-    $('#his_status_img').attr('src', status_imgs[his_piece-1]);
-    $('#my_status_img').attr('src', status_imgs[my_piece-1]);
-
-    if(my_piece == 1){  //黑先白后
-        $('#game-canvas').css('cursor', 'pointer');
+    if(my_piece_color == 1){  //黑先白后
+        $('#chess-grid svg').css('cursor', 'pointer');
     }
     initStartSign();
 }
@@ -230,15 +246,7 @@ function on_gameover(msg){
     $('#status-span').text('游戏结束');
     $('#piece_sign_top').removeClass('gamemove-status');
     $('#piece_sign_bottom').removeClass('gamemove-status');
-    $('#game-canvas').css('cursor', 'default'); 
-
-    /*pid = parseInt(msg.up)
-    if (pid > 0 && pid != my_piece){
-        row = parseInt(msg.row);
-        col = parseInt(msg.col);
-        gamec.drawPiece(row, col, his_piece);
-        game_pieces[row][col] = his_piece;                  
-    }*/
+    $('#chess-grid svg').css('cursor', 'default'); 
 
     $('#alert-title').text('游戏结束');
     $('#alert-model-dom').data('id', 0).modal('show');
@@ -249,7 +257,8 @@ function on_gameover(msg){
  * @return {bool}     
  */
 function on_chat(msg){
-    $('#chat-div ul').append('<li class="hischat-li">'+msg.content+'</li>');
+    $('#chat-div ul').append('<li class="hischat-li"></li>');
+    $('#chat-div ul li:last-child').text(msg.content);
     $('#chat-div ul').scrollTop($('#chat-div ul')[0].scrollHeight);
 }
 
@@ -321,6 +330,18 @@ $(function() {
 
     if(room_status != 0){
         initStartSign();
+    }
+    if(is_waiting ){
+        $('#chess-grid svg').css('cursor', 'default');
+    }
+
+    var WebSocket = window.WebSocket || window.MozWebSocket;
+        if (WebSocket) {
+            try {
+                gamesocket = new WebSocket(wsurl);
+            } catch (e) {
+                alert(e)
+            }
     }
 
     if (gamesocket) {

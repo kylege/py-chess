@@ -98,8 +98,8 @@ var ChessMove = function(row1,col1,row2,col2){
 	 * @return {bool} 
 	 */
 	this._canMove_shi = function(){
-		if(!Math.abs(this.row1-this.row2) == 1 
-			|| !Math.abs(this.col1-this.col2) == 1 ){
+		if(Math.abs(this.row1-this.row2) != 1 
+			|| Math.abs(this.col1-this.col2) != 1 ){
 			return false;
 		}
 		if(this.col2 <3 || this.col2 > 5) return false;

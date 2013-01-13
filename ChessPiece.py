@@ -1,4 +1,19 @@
 #encoding=utf-8
+
+from ChessMove import ChessMove
+
+class BasicReturn():
+    result = True
+    code   = 0
+    msg    = ''
+    data   = None
+
+    def __init__(self, result=True, code=0, msg='', data=None):
+        self.result = result
+        self.code = code
+        self.msg = msg
+        self.data = data
+
 '''
     棋子的属性
 '''
@@ -22,6 +37,8 @@ class ChessGame():
 
     """下棋相关，保存数据等"""
     def __init__(self):
+        self.last_move_color = None
+        self.isGameOver = False
         my_piece_pos = [
             [6,0,'bing'],
             [6,2, 'bing'],
@@ -68,12 +85,24 @@ class ChessGame():
     '''
         将棋子移到指定格子上
     '''
-    def moveTo(self, row, col):
-        org_key = str(self.row+'-'+str(self.col))
-        if self.PiecesMap[org_key]:
-            del self.PiecesMap[org_key]
-        key = str(row)+'-'+str(col)
-        self.PiecesMap[key] = self
+    def moveTo(self, user_color, row1, col1, row2, col2):
+        if user_color == self.last_move_color:
+            return {'result':False, 'msg':'对方还没走棋'}
+        org_key = "%d-%d" % (row1,col1)
+        if not org_key in self.PiecesMap:
+            return BasicReturn(False,-1,'没有选择棋子')
+
+        move = ChessMove(self, row1, col1, row2, col2)
+        if not move.canMove():
+            return BasicReturn(False,-1,'走法不合规则')
+
+        key = "%d-%d" % (row2, col2)
+        if key in self.PiecesMap and self.PiecesMap[key].name == u'king': # 判断是不是王挂了，结束游戏
+            self.isGameOver = True
+
+        self.PiecesMap[key] = self.PiecesMap[org_key]
+        del self.PiecesMap[org_key]
+        return BasicReturn(True)
 
 class GameRoom():
 	STATUS_WAITING = 0;

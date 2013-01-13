@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block css-block %}
-  <style type="text/css">
-
-  </style>
+<style type="text/css">
+.gamemove-status {
+    background-image: url("{{config.ConfigStaticPath}}/img/kuser-4.png");
+}
+</style>
 {% end %}
 
 {% block container-fluid %}
@@ -64,10 +66,18 @@
 {% block javascript-block %}
 	<script type="text/javascript">
 		var static_path = '{{ config.ConfigStaticPath }}';
-		var my_piece_color = 1;
-		var his_piece_color = 2;
+		var my_piece_color = {{ my_piece_id }};
+        var is_waiting = {{ is_waiting and 'true' or 'false' }};
+		var his_piece_color = {{ my_piece_id == 1 and 2 or 1}};
+        var room_status = {{ cur_room.status }};
+        var room_name = '{{ cur_room.room_name }}';
+        var status_imgs = ['{{config.ConfigStaticPath}}/img/black.png', '{{config.ConfigStaticPath}}/img/white.png'];
+        var gamesocket;
+        var wsurl = 'ws://{{config.ConfigDomain}}/gamesocket?room={{ cur_room.room_name }}&up={{my_piece_id}}';
 	</script>
+
     <script type="text/javascript" src="static/js/jquery-1.8.3.min.js"></script>	
+    <script src="{{config.ConfigStaticPath}}/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="static/js/d3.v3.min.js"></script>
     <script type="text/javascript" src="static/js/ChessPiece.js"></script>
     <script type="text/javascript" src="static/js/ChessGrid.js"></script>
