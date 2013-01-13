@@ -10,12 +10,16 @@ import random
 
 import tornado
 import json
-from tornado import web, autoreload, websocket, ioloop, options, escape
+from tornado import web, autoreload, websocket, ioloop, escape
 from Config import Config
 from datetime import timedelta
 import logging
 
+from tornado.options import define, options  
+
 from ChessPiece import ChessPiece, ChessGame, GameRoom
+
+define("port", default=8888, help="Run server on a specific port", type=int)  
 
 '''
     进入房间页面
@@ -198,6 +202,12 @@ class RoomListHandler(web.RequestHandler):
                     rooms = GameSocketHandler.all_rooms,
                     )
 
+def printAllRooms():
+    logging.info( 'All rooms: ' )
+    logging.info( GameSocketHandler.all_rooms)
+    logging.info( 'All handlers: ')
+    logging.info( GameSocketHandler.socket_handlers)
+
 urls = [
         (r"/room-(.{1,200})", EnterRoomHandler),
         (r"/rooms", RoomListHandler),
@@ -214,11 +224,11 @@ settings = dict(
 isLog = True
 
 def main():
-    # printrooms = tornado.ioloop.PeriodicCallback(printAllRooms, GameSocketHandler.active_timeout)
-    # printrooms.start()
+    printrooms = tornado.ioloop.PeriodicCallback(printAllRooms, GameSocketHandler.active_timeout)
+    printrooms.start()
     tornado.options.parse_command_line() # -log_file_prefix=your complete path/test_log@8091.log
     application = web.Application(urls, **settings)
-    application.listen(8888)
+    application.listen(options.port)
     # tornado.autoreload.start(tornado.ioloop.IOLoop.instance()) # add this to enable autorestart
     tornado.ioloop.IOLoop.instance().start()
 
