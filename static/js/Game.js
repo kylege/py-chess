@@ -239,6 +239,8 @@ function on_gamestart(msg){
 
     if(my_piece_color == 1){  //黑先白后
         $('#chess-grid svg').css('cursor', 'pointer');
+    }else{
+        $('#chess-grid svg').css('cursor', 'default');
     }
     initStartSign();
 }
