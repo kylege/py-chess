@@ -75,7 +75,7 @@ var ChessPiece =function (row, col, name, color){
 	 * @return {bool} 
 	 */
 	this.remove = function(){
-		// d3.select('#'+this.key).remove();
+		d3.select('#'+this.key).remove();
 		delete ChessPiece.PiecesMap[this.row+'-'+this.col];
 	}
 	/**
@@ -201,24 +201,34 @@ var ChessPiece =function (row, col, name, color){
 
     	var tbdiv_id = this.color == my_piece_color ? 1 : 0;
     	var tbdiv = toolbar_div[tbdiv_id];
-    	d3.select(tbdiv+" img").remove();
-
-    	var move2y = [1.5*cell_width, (row_count-1.5)*cell_width];
-    	var desy = move2y[tbdiv_id];
     	var bgimg = this.getImageUrl();
-    	d3.select('#'+this.key).transition()
-    		.attr('x', -piece_width)
-    		.attr('y', desy)
-    		.duration(1500)
-    		.each("end",function() {
-    			d3.select(this).remove();
-    			d3.select(tbdiv).append('img')
-		    		.attr('src', bgimg)
-		    		.attr('width', piece_width)
-		    		.attr('height', piece_width)
-		    		.style('margin-left', '54px')
-		    		.style('margin-top', '5px')
-    		})
+    	var imgobj = d3.select(tbdiv+" img");
+    	if (imgobj[0][0]){
+	    	d3.select(tbdiv+" img").transition()
+	    		.style('opacity', 0)
+	    		.duration(1000)
+	    		.each("end",function() {
+	    			d3.select(this).remove();
+	    			d3.select(tbdiv).append('img')
+			    		.attr('src', bgimg)
+			    		.attr('width', piece_width)
+			    		.attr('height', piece_width)
+			    		.style('margin-left', '54px')
+			    		.style('margin-top', '5px')
+	    		})
+    	}else{
+    		var newimg = d3.select(tbdiv).append('img')
+				    		.attr('src', bgimg)
+				    		.attr('width', piece_width)
+				    		.attr('height', piece_width)
+				    		.style('margin-left', '54px')
+				    		.style('margin-top', '5px')
+				    		.style('opacity', 0)
+			newimg.transition()
+				.style('opacity', 1)
+	    		.duration(1000)
+    	}
+
     	this.remove();
     }   	
 
