@@ -34,7 +34,8 @@ body {
 	margin-left: 30px;
 }
 #piece_sign_bottom {
-	margin-top: 380px;
+	position: relative;
+	top: 273px;
 	margin-left: 30px;
 }
 .gamemove-status {

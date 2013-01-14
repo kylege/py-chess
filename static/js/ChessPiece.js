@@ -60,7 +60,7 @@ var ChessPiece =function (row, col, name, color){
 
 		if (ChessPiece.PiecesMap[row+'-'+col]){
 			var org_piece = ChessPiece.PiecesMap[row+'-'+col];
-			org_piece.remove();
+			org_piece._getKilledMove();
 		}
 		ChessPiece.PiecesMap[row+'-'+col] = this;
 		delete ChessPiece.PiecesMap[this.row+'-'+this.col];
@@ -75,7 +75,7 @@ var ChessPiece =function (row, col, name, color){
 	 * @return {bool} 
 	 */
 	this.remove = function(){
-		d3.select('#'+this.key).remove();
+		// d3.select('#'+this.key).remove();
 		delete ChessPiece.PiecesMap[this.row+'-'+this.col];
 	}
 	/**
@@ -191,6 +191,35 @@ var ChessPiece =function (row, col, name, color){
 			    .attr('class', 'shape-render')
 			    .attr('class', zoom_class);
    		}
+    }
+    /**
+     * 当自己被吃了时的动作，以前是直接消失，现在加点移动效果
+     * @return {bool} 
+     */
+    this._getKilledMove = function(){
+    	var toolbar_div = ['#piece_sign_top', '#piece_sign_bottom'];
+
+    	var tbdiv_id = this.color == my_piece_color ? 1 : 0;
+    	var tbdiv = toolbar_div[tbdiv_id];
+    	d3.select(tbdiv+" img").remove();
+
+    	var move2y = [1.5*cell_width, (row_count-1.5)*cell_width];
+    	var desy = move2y[tbdiv_id];
+    	var bgimg = this.getImageUrl();
+    	d3.select('#'+this.key).transition()
+    		.attr('x', -piece_width)
+    		.attr('y', desy)
+    		.duration(1500)
+    		.each("end",function() {
+    			d3.select(this).remove();
+    			d3.select(tbdiv).append('img')
+		    		.attr('src', bgimg)
+		    		.attr('width', piece_width)
+		    		.attr('height', piece_width)
+		    		.style('margin-left', '54px')
+		    		.style('margin-top', '5px')
+    		})
+    	this.remove();
     }   	
 
 }
