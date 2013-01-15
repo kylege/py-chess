@@ -58,6 +58,8 @@ var ChessPiece =function (row, col, name, color){
 			d3.select(this).attr('id', newkey);  // 这里id已经变了
 		});
 
+		document.getElementById('move-audio').play();
+
 		if (ChessPiece.PiecesMap[row+'-'+col]){
 			var org_piece = ChessPiece.PiecesMap[row+'-'+col];
 			org_piece._getKilledMove();
@@ -97,11 +99,6 @@ var ChessPiece =function (row, col, name, color){
 	 * @return {bool} 
 	 */
 	this.zoomIn = function(){
-		/*var inw = 5;
-		d3.select('#'+this.key)
-		.transition()
-		.attr('width',piece_width+inw)
-		.attr('height',piece_width+inw);*/
 		this._drawZoomCross(this.row, this.col);
 	}
 	/**
