@@ -1,5 +1,4 @@
-var container = $('#container');
-var chess_gsv = d3.select('#chess-grid').append('svg:svg')
+var chess_svg = d3.select('#chess-grid').append('svg:svg')
 					.attr('width', 460).attr('height', 510);
 //棋盘边界margin
 var out_width = 30;
@@ -49,8 +48,8 @@ function getCurPosition(e) {
       x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
       y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
     }  
-    x -= $(chess_gsv[0][0]).offset().left;  //兼容firefox
-    y -= $(chess_gsv[0][0]).offset().top;
+    x -= $(chess_svg[0][0]).offset().left;  //兼容firefox
+    y -= $(chess_svg[0][0]).offset().top;
     return [x, y];
 } 
 /**
@@ -335,7 +334,7 @@ function initDraw(){
 
 $(function() {
     initDraw();
-    chess_gsv[0][0].addEventListener("click", gameClickHandler, false);
+    chess_svg[0][0].addEventListener("click", gameClickHandler, false);
 
     if(room_status != 0){
         initStartSign();

@@ -76,11 +76,11 @@
         var wsurl = 'ws://{{config.ConfigDomain}}/gamesocket?room={{ cur_room.room_name }}&up={{my_piece_id}}';
 	</script>
 
-    <script type="text/javascript" src="static/js/jquery-1.8.3.min.js"></script>	
+    <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/jquery-1.8.3.min.js"></script>	
     <script src="{{config.ConfigStaticPath}}/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="static/js/d3.v3.min.js"></script>
-    <script type="text/javascript" src="static/js/ChessPiece.js"></script>
-    <script type="text/javascript" src="static/js/ChessGrid.js"></script>
-    <script type="text/javascript" src="static/js/ChessMove.js"></script>
-    <script type="text/javascript" src="static/js/Game.js"></script>
+    <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/ChessPiece.js"></script>
+    <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/ChessGrid.js"></script>
+    <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/ChessMove.js"></script>
+    <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/Game.js"></script>
 {% end %}

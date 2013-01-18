@@ -39,7 +39,7 @@ var ChessGrid = function() {
 	                    .interpolate('linear');
 
 	    //最外围的那个框
-	    chess_gsv.data(gdata_out)  
+	    chess_svg.data(gdata_out)  
 	        .append('svg:path')
 	        .attr('d', line(gdata_out) + 'Z')
 	        .style('stroke-width', 2)
@@ -48,7 +48,7 @@ var ChessGrid = function() {
 	        .attr('class', 'shape-render');
 
 	    //次外围的那个框
-	    chess_gsv.data(gdata_in)  
+	    chess_svg.data(gdata_in)  
 	        .append('svg:path')
 	        .attr('d', line(gdata_in) + 'Z')
 	        .style('stroke-width', 1)
@@ -65,7 +65,7 @@ var ChessGrid = function() {
 
 	    //画竖线
 	    for (i=1; i<col_count; i++){
-	    	var myLine = chess_gsv.append("svg:line")
+	    	var myLine = chess_svg.append("svg:line")
 			    .attr("x1", i*cell_width+out_width)
 			    .attr("y1", 0+out_width)
 			    .attr("x2", i*cell_width+out_width)
@@ -74,7 +74,7 @@ var ChessGrid = function() {
 			    .style("stroke-width", 1)
 			    .attr('class', 'shape-render');
 
-			var myLine = chess_gsv.append("svg:line")
+			var myLine = chess_svg.append("svg:line")
 			    .attr("x1", i*cell_width+out_width)
 			    .attr("y1", 5*cell_width+out_width)
 			    .attr("x2", i*cell_width+out_width)
@@ -85,7 +85,7 @@ var ChessGrid = function() {
 	    }
 	    //画横线
 	    for (i=1; i<row_count; i++){
-			var myLine = chess_gsv.append("svg:line")
+			var myLine = chess_svg.append("svg:line")
 			    .attr("x1", out_width)
 			    .attr("y1", i*cell_width+out_width)
 			    .attr("x2", all_width-out_width)
@@ -109,7 +109,7 @@ var ChessGrid = function() {
 	    ];
 	    for (i=0; i<cross_cords.length; i++){
 	    	crossi = cross_cords[i]
-	    	var myLine = chess_gsv.append("svg:line")
+	    	var myLine = chess_svg.append("svg:line")
 			    .attr("x1", crossi[0][0])
 			    .attr("y1", crossi[0][1])
 			    .attr("x2", crossi[1][0])
@@ -173,7 +173,7 @@ var ChessGrid = function() {
     this._draw_lines = function(lines, line_width, line_color, father_obj){
     	if(!line_width) line_width = 1;
     	if(!line_color) line_color = linecolor;
-    	if(!father_obj) father_obj = chess_gsv;
+    	if(!father_obj) father_obj = chess_svg;
 
     	for (j=0; j<lines.length; j++){
    			crossi = lines[j]

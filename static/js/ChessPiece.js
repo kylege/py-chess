@@ -86,13 +86,13 @@ var ChessPiece =function (row, col, name, color){
 	this.addAndShow = function(){
 		var cord = this.getCordinate(this.row, this.col);
 		ChessPiece.PiecesMap[this.row+'-'+this.col] = this;
-		chess_gsv.append('svg:image')
+		chess_svg.append('svg:image')
 	    	.attr('width', piece_width)
 	    	.attr('height', piece_width)
 	    	.attr('xlink:href', this.getImageUrl())
 	    	.attr('x', cord[0]-piece_width/2)
-	    	.attr('y', cord[1]-piece_width/2).
-	    	attr('id', this.key);
+	    	.attr('y', cord[1]-piece_width/2)
+	    	.attr('id', this.key);
 	}
 	/**
 	 * 放大
@@ -152,7 +152,7 @@ var ChessPiece =function (row, col, name, color){
 		if(d3.select('.zoomnode')[0][0]){
 			var zoom_group = d3.select('.zoomnode');
 		}else{
-			var zoom_group = chess_gsv.append('svg:g')
+			var zoom_group = chess_svg.append('svg:g')
 			.attr("class", "zoomnode");
 		}
 
@@ -174,7 +174,7 @@ var ChessPiece =function (row, col, name, color){
     this._draw_lines = function(lines, line_width, line_color, father_obj, zoom_class){
     	if(!line_width) line_width = 1;
     	if(!line_color) line_color = linecolor;
-    	if(!father_obj) father_obj = chess_gsv;
+    	if(!father_obj) father_obj = chess_svg;
 
     	for (j=0; j<lines.length; j++){
    			crossi = lines[j]
