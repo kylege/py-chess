@@ -83,7 +83,7 @@ class ChessGame():
     '''
     def moveTo(self, user_color, row1, col1, row2, col2):
         if user_color == self.last_move_color:
-            return {'result':False, 'msg':'对方还没走棋'}
+            return BasicReturn(False, -1, '对方还没走棋')
         org_key = "%d-%d" % (row1,col1)
         if not org_key in self.PiecesMap:
             return BasicReturn(False,-1,'没有选择棋子')
@@ -98,6 +98,7 @@ class ChessGame():
 
         self.PiecesMap[key] = self.PiecesMap[org_key]
         del self.PiecesMap[org_key]
+        self.last_move_color = user_color
         return BasicReturn(True)
 
 class GameRoom():

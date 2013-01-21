@@ -18,6 +18,9 @@ import logging
 from tornado.options import define, options  
 
 from ChessPiece import ChessPiece, ChessGame, GameRoom
+import sys 
+reload(sys) 
+sys.setdefaultencoding('utf8')
 
 define("port", default=8888, help="Run server on a specific port", type=int)  
 
