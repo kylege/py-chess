@@ -164,6 +164,8 @@ class GameSocketHandler(tornado.websocket.WebSocketHandler):
             if isLog: logging.info('棋子移动失败.')
             return False
         else:
+            socket = GameSocketHandler.socket_handlers[self.hiskey]
+            socket.write_message({'type':'on_gamemove', 'row1':row1, 'col1':col1, 'row2':row2, 'col2':col2})
             if room.chess_game.isGameOver:  #游戏结束
                 if isLog:  logging.info( "Room: %s gameover." % self.room_name.encode('UTF-8') )
                 socket = GameSocketHandler.socket_handlers[self.hiskey]
@@ -171,9 +173,6 @@ class GameSocketHandler(tornado.websocket.WebSocketHandler):
                 self.write_message({'type':'on_gameover'})
                 self.close()
                 socket.close()
-            else:
-                socket = GameSocketHandler.socket_handlers[self.hiskey]
-                socket.write_message({'type':'on_gamemove', 'row1':row1, 'col1':col1, 'row2':row2, 'col2':col2})
         return True
 
     def allow_draft76(self):
