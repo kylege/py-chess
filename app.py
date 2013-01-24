@@ -211,17 +211,10 @@ def printAllRooms():
     logging.info( 'All handlers: ')
     logging.info( GameSocketHandler.socket_handlers)
 
-class listAllGames(web.RequestHandler):
-
-    def get(self):
-        self.render('all_games.html',
-                    config = Config,
-                    )
-
 urls = [
         (r"/room-(.{1,200})", EnterRoomHandler),
         (r"/rooms", RoomListHandler),
-        (r"/", listAllGames),
+        (r"/", RoomListHandler),
         (r"/gamesocket", GameSocketHandler),
         ]
 
