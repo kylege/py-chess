@@ -121,7 +121,7 @@ var ChessPiece =function (row, col, name, color){
 	this._drawZoomCross = function(row, col){
 		var cross_len = 10;
 		var zoomclass = 'zoom-'+row+'-'+col;
-		if((d3.select('#'+zoomclass)[0][0])){
+		if((d3.select('.'+zoomclass)[0][0])){
 			return;
 		}
 		var cord = this.getCordinate(row, col);
@@ -185,8 +185,7 @@ var ChessPiece =function (row, col, name, color){
 			    .attr("y2", crossi[1][1])
 			    .style("stroke", line_color)
 			    .style("stroke-width", line_width)
-			    .attr('class', 'shape-render')
-			    .attr('class', zoom_class);
+			    .attr('class', 'shape-render '+zoom_class)
    		}
     }
     /**

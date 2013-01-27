@@ -10,7 +10,7 @@ var col_count = 8;
 var piece_width = 42;
 
 var chess_is_init = true;  //棋盘是不是没有走动过，如果没走动，他人上线就不用重画
-
+var offline_timeout;
 /**
  * 获取当前坐标属于棋盘中的第几行几列
  * @param  {} pos 
@@ -187,7 +187,9 @@ function on_offline(msg){
     $('#piece_sign_top').removeClass('gamemove-status');
     $('#piece_sign_bottom').removeClass('gamemove-status');
     $('#alert-title').text('对方离线');
-    $('#alert-model-dom').data('id', 0).modal('show');
+    offline_timeout = setTimeout(function(){
+       $('#alert-model-dom').data('id', 0).modal('show');
+    }, 2000);
 }
 /**
  * 对方走一步棋
@@ -225,6 +227,7 @@ function on_gamemove(msg){
  * @return {bool}     
  */
 function on_gamestart(msg){
+    clearTimeout(offline_timeout);
     is_waiting = (my_piece_color==2) ? true : false;
     room_status = 1;
     $('#status-span').text('对方上线，游戏开始');

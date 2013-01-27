@@ -73,7 +73,7 @@
         var room_name = '{{ cur_room.room_name }}';
         var status_imgs = ['{{config.ConfigStaticPath}}/img/black.png', '{{config.ConfigStaticPath}}/img/white.png'];
         var gamesocket;
-        var wsurl = 'ws://{{config.ConfigDomain}}/gamesocket?room={{ cur_room.room_name }}&up={{my_piece_id}}';
+        var wsurl = 'ws://{{config.ConfigDomain}}/gs?room={{ cur_room.room_name }}&up={{my_piece_id}}';
 	</script>
 
     <script type="text/javascript" src="{{config.ConfigStaticPath}}/js/jquery-1.8.3.min.js"></script>	
