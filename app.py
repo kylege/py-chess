@@ -23,6 +23,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 define("port", default=8888, help="Run server on a specific port", type=int)  
+define("address", type=str, default='127.0.0.1', help="The server address")
 
 '''
     进入房间页面
@@ -231,7 +232,7 @@ def main():
     # printrooms.start()
     tornado.options.parse_command_line() # -log_file_prefix=your complete path/test_log@8091.log
     application = web.Application(urls, **settings)
-    application.listen(options.port)
+    application.listen(options.address, options.port)
     # tornado.autoreload.start(tornado.ioloop.IOLoop.instance()) # add this to enable autorestart
     tornado.ioloop.IOLoop.instance().start()
 
